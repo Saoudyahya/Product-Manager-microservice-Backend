@@ -1,11 +1,10 @@
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import DefaultLayout from '../../layout/DefaultLayout';
+
 import React, { useState, useEffect  } from 'react';
-import { getAllProductTypes } from '../../components/Backend-api/ProductTypeApi';
-import { createProduct } from '../../components/Backend-api/ProductAPI';
-import ProductTypeForm from './FormProductType';
-import Modal from '../../components/alerts/model';
-const ProductForm = () => {
+import { getAllProductTypes } from '../../../components/Backend-api/ProductTypeApi';
+import { updateProduct } from '../../../components/Backend-api/ProductAPI';
+import ProductTypeForm from '.././FormProductType';
+import Modal from '../../../components/alerts/model';
+const UpdateProductForm = ({product,onClose,onRefetch }) => {
   const [productTypes, setProductTypes] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] = useState<{ id: number; name: string } | null>({ id: 1, name: '' });
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
@@ -13,6 +12,7 @@ const ProductForm = () => {
 
 
   const [formData, setFormData] = useState({
+    id: '',
     name: '',
     reference: '',
     brand: '',
@@ -36,6 +36,8 @@ const ProductForm = () => {
 
   useEffect(() => {
     fetchProductTypes();
+    console.log(product);
+    setFormData(product)
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -49,39 +51,31 @@ const ProductForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      const response = await createProduct(formData);
-      console.log('Product created successfully:', response);
-      setFormData({
-        name: '',
-        reference: '',
-        brand: '',
-        productType:{
-          id: selectedOption.id ,
-          name: selectedOption.name
-        },
-        stock: '',
-        price_Unit: '',
-        description: ''
-      });
+      const response = await updateProduct(formData.id, formData);
+      console.log(formData);
+      onClose(); 
+      onRefetch();
+      console.log('Product updated successfully:', response);
+     
     } catch (error) {
       console.error('Error creating product:', error);
     }
   };
+ 
 
   const changeTextColor = () => {
     setIsOptionSelected(true);
   };
 
   return (
-    <DefaultLayout>
-      <Breadcrumb pageName="Product" />
+   <>
 
    
-        <div className="flex flex-col gap-9">
+        <div className="flex flex-col gap-9 mt-10">
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
-                Product Form
+                update Product  Form
               </h3>
             </div>
            <form >
@@ -238,17 +232,24 @@ const ProductForm = () => {
                   ></textarea>
                 </div>
 
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90" onClick={handleSubmit}>
-                uploade Product
-                </button>
+                <div className="flex justify-between mt-4">
+  <button className="flex-1 mr-2 rounded bg-green-500 p-3 font-medium text-white hover:bg-green-600" onClick={handleSubmit}>
+    Update Product
+  </button>
+  <button className="flex-1 rounded bg-red-500 p-3 font-medium text-white hover:bg-red-600" onClick={onClose}>
+    Cancel
+  </button>
+</div>
+
               </div>
             </form>
+            
           </div>
         </div>
 
       
-    </DefaultLayout>
+        </>
   );
 };
 
-export default  ProductForm;
+export default  UpdateProductForm;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllProducts } from '../../Backend-api/ProductAPI';
+import { getProductById } from '../../Backend-api/ProductAPI';
 
 interface Product {
   id: number;
@@ -19,12 +19,13 @@ interface SelectedProduct extends Product {
   quantity: number;
 }
 
-const SelectProduct: React.FC <{
+const SelectProductSupplier: React.FC <{
   onProductChange: (selectedProducts: SelectedProduct[]) => void;
   onQuantityChange: (productId: number, quantity: number) => void;
   onTotalPriceChange: (totalPrice: number) => void;
+  productIds: number[];
   formSubmitted: boolean;
-}> = ({ onProductChange, onQuantityChange, onTotalPriceChange,formSubmitted }) => {
+}> = ({ onProductChange, onQuantityChange, onTotalPriceChange ,productIds,formSubmitted }) => {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
@@ -32,29 +33,37 @@ const SelectProduct: React.FC <{
 
   const fetchProducts = async () => {
     try {
-      const products = await getAllProducts();
+      const products: Product[] = [];
+      console.log(productIds )
+        for (const productId of productIds) {
+        const product = await getProductById(productId);
+        products.push(product);
+      }
       setProducts(products);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
   };
-
   useEffect(() => {
     fetchProducts();
   }, []);
-  useEffect(() => {
-    if (formSubmitted) {
-  
-      setSelectedProducts([]);
-    } 
-  }, [formSubmitted]);
+   useEffect(() => {
+  fetchProducts();
+  setSelectedProducts([]); 
+}, [productIds]);
+useEffect(() => {
+  if (formSubmitted) {
+
+    setSelectedProducts([]);
+  } 
+}, [formSubmitted]);
 
   const addSelectedProduct = (productId: number) => {
     const selectedProduct = products.find((product) => product.id === productId);
     if (selectedProduct) {
       const isAlreadySelected = selectedProducts.some((product) => product.id === productId);
       if (isAlreadySelected) {
-        // Show alert
+    
         const alertElement = document.getElementById('alert');
         if (alertElement) {
           alertElement.style.display = 'block';
@@ -238,7 +247,7 @@ const SelectProduct: React.FC <{
       {/* Display total transaction price */}
       {selectedProducts.length > 0 && (
         <div className="mt-4 p-4 border border-gray-300 rounded-md bg-gray-100 dark:bg-gray-800">
-          <h2 className="text-lg font-semibold mb-2 text-center">Total Transaction Price</h2>
+          <h2 className="text-lg font-semibold mb-2 text-center">Total Order Price</h2>
           <p className="text-gray-800 dark:text-gray-200 text-center">
             {calculateTransactionTotal()}
           </p>
@@ -248,4 +257,4 @@ const SelectProduct: React.FC <{
   );
 };
 
-export default SelectProduct;
+export default SelectProductSupplier;

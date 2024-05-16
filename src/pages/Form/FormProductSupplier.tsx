@@ -2,10 +2,10 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '../../layout/DefaultLayout';
 import React, { useState, useEffect  } from 'react';
 import { getAllProductTypes } from '../../components/Backend-api/ProductTypeApi';
-import { createProduct } from '../../components/Backend-api/ProductAPI';
 import ProductTypeForm from './FormProductType';
 import Modal from '../../components/alerts/model';
-const ProductForm = () => {
+const ProductFormSupplier =  ({ onProductUpload }) => {
+
   const [productTypes, setProductTypes] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] = useState<{ id: number; name: string } | null>({ id: 1, name: '' });
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
@@ -48,9 +48,9 @@ const ProductForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    try {
-      const response = await createProduct(formData);
-      console.log('Product created successfully:', response);
+
+    onProductUpload(formData);
+      
       setFormData({
         name: '',
         reference: '',
@@ -63,9 +63,7 @@ const ProductForm = () => {
         price_Unit: '',
         description: ''
       });
-    } catch (error) {
-      console.error('Error creating product:', error);
-    }
+  
   };
 
   const changeTextColor = () => {
@@ -73,8 +71,8 @@ const ProductForm = () => {
   };
 
   return (
-    <DefaultLayout>
-      <Breadcrumb pageName="Product" />
+   
+     <>
 
    
         <div className="flex flex-col gap-9">
@@ -222,6 +220,7 @@ const ProductForm = () => {
         </Modal>
       )}
     </div>
+    
                 </div>
 
                 <div className="mb-6">
@@ -246,9 +245,9 @@ const ProductForm = () => {
           </div>
         </div>
 
-      
-    </DefaultLayout>
+      </>
+ 
   );
 };
 
-export default  ProductForm;
+export default  ProductFormSupplier;

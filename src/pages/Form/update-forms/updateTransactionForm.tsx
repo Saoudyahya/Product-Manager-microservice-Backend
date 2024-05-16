@@ -1,16 +1,20 @@
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import DefaultLayout from '../../layout/DefaultLayout';
-import SelectProduct from '../../components/Forms/SelectGroup/SelectProduct';
-import DatePickerOne from '../../components/Forms/DatePicker/DatePickerOne';
-import SelectTransactionType from '../../components/Forms/SelectGroup/SelectTransactionType';
-import { createTransactionProduct } from '../../components/Backend-api/TransactionAPi';
-import { useState } from 'react';
-import SelectPaymentType from '../../components/Forms/SelectGroup/SelectPaymentType';
-import SelectClientEmail from '../../components/Forms/SelectGroup/SelectClientEmail';
 
-const TransactionForm = () => {
+import SelectProduct from '../../../components/Forms/SelectGroup/SelectProduct';
+import DatePickerOne from '../../../components/Forms/DatePicker/DatePickerOne';
+import SelectTransactionType from '../../../components/Forms/SelectGroup/SelectTransactionType';
+import { updateTransaction } from '../../../components/Backend-api/TransactionAPi';
+import { useState, useEffect } from 'react';
+import SelectPaymentType from '../../../components/Forms/SelectGroup/SelectPaymentType';
+import SelectClientEmail from '../../../components/Forms/SelectGroup/SelectClientEmail';
+
+const UpdateTransactionForm: React.FC<{
+    transaction: any;
+    onClose: () => void;
+    onRefetch: () => void;
+  }> = ({ transaction, onClose, onRefetch }) => {
   const [formData, setFormData] = useState({
-    reference: '',
+    id:'',
+    references: '',
     products: [],
     transactionType: '',
     transactionDate: '',
@@ -18,6 +22,18 @@ const TransactionForm = () => {
     paymentType: '',
     client: '',
   });
+
+  useEffect(() => {
+    console.log("Transaction prop:", transaction);
+    setFormData(transaction);
+  }, [transaction]);
+  
+  useEffect(() => {
+   
+    console.log(formData);
+}, [formData]);
+  
+
   const [formSubmitted, setFormSubmitted] = useState(false);
 
 
@@ -30,32 +46,32 @@ const TransactionForm = () => {
     setFormData({ ...formData, client: clientId });
   };
 
-  const handleQuantityChange = (productId, quantity) => {
+  const handleQuantityChange = (productId: any, quantity: any) => {
     const updatedProducts = formData.products.map((product) =>
       product.id === productId ? { ...product, quantity } : product
     );
     setFormData({ ...formData, products: updatedProducts });
   };
 
-  const handleDateChange = (selectedDate) => {
-    setFormData({ ...formData, transactionDate: selectedDate });
-  };
+ const handleDateChange = (selectedDate: any) => {
+  setFormData(prevFormData => ({ ...prevFormData, transactionDate: selectedDate }));
+};
 
-  const handlePaymentTypeChange = (selectedType) => {
+  const handlePaymentTypeChange = (selectedType: any) => {
     setFormData({ ...formData, paymentType: selectedType });
   };
 
-  const handleTransactionTypeChange = (selectedType) => {
+  const handleTransactionTypeChange = (selectedType: any) => {
     setFormData({ ...formData, transactionType: selectedType });
   };
 
-  const handleTotalPriceChange = (totalPrice) => {
+  const handleTotalPriceChange = (totalPrice: any) => {
     setFormData({ ...formData, totalPrice });
   };
 
  const handleReferenceChange = (e) => {
   const { value } = e.target;
-  setFormData({ ...formData, reference: value });
+  setFormData({ ...formData, references: value });
 };
 
   const handleSubmit = async (e) => {
@@ -76,7 +92,8 @@ const TransactionForm = () => {
         quantity: product.quantity
       }));
         const data = {
-        references:formData.reference,
+        id:formData.id,
+        references:formData.references,
         products: formattedProducts,
         transactionType: formData.transactionType,
         transactionDate: formData.transactionDate,
@@ -84,12 +101,15 @@ const TransactionForm = () => {
         payment_method: formData.paymentType,
         totalPrice: formData.totalPrice
       };
-      console.log(' created successfully:', data);
-      const response = await createTransactionProduct(data);
+      console.log(' created successfully:', data.id);
+      onClose()
+      onRefetch()
+      const response = await updateTransaction(data.id , data);
   
       console.log('Transaction created successfully:', response);
       setFormData({
-        reference: '',
+        id:'',
+        references: '',
         products: [],
         transactionType: '',
         transactionDate: '',
@@ -104,14 +124,13 @@ const TransactionForm = () => {
   };
 
   return (
-    <DefaultLayout>
-      <Breadcrumb pageName="Transaction" />
+   <>
 
-      <div className=" gap-9 sm:grid-cols-2">
+      <div className=" gap-9 sm:grid-cols-2 mt-10 ">
         <div className="flex flex-col gap-9">
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">Transaction Form</h3>
+              <h3 className="font-medium text-black dark:text-white">update Transaction Form</h3>
             </div>
             <form onSubmit={handleSubmit}>
               <div className="p-6.5">
@@ -142,16 +161,21 @@ const TransactionForm = () => {
                 <SelectPaymentType onPaymentTypeChange={handlePaymentTypeChange} />
                 <SelectClientEmail onClientChange={handleClientChange} formSubmitted={formSubmitted} />
 
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                  Upload Transaction
-                </button>
+                <div className="flex justify-between mt-4">
+  <button className="flex-1 mr-2 rounded bg-green-500 p-3 font-medium text-white hover:bg-green-600" onClick={handleSubmit}>
+    Update Transaction
+  </button>
+  <button className="flex-1 rounded bg-red-500 p-3 font-medium text-white hover:bg-red-600" onClick={onClose}>
+    Cancel
+  </button>
+</div>
               </div>
             </form>
           </div>
         </div>
       </div>
-    </DefaultLayout>
+      </>
   );
 };
 
-export default TransactionForm;
+export default UpdateTransactionForm;

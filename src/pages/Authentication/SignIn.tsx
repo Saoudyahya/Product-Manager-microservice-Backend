@@ -1,9 +1,41 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import {useState} from 'react';
+import { Link ,useNavigate} from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
+import { isAuthenticated, signOut } from '../../components/jwt/jwt';
+
 
 const SignIn: React.FC = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:3001/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+      if (!response.ok) {
+        throw new Error('Invalid credentials');
+      }
+      const data = await response.json();
+      const token = data.token;
+      localStorage.setItem('jwtToken', token);
+     
+    } catch (error) {
+
+      console.error('Login failed:', error.message);
+    }
+      navigate('/calendar');
+  
+  };
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-full max-w-md rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-8">
@@ -19,11 +51,12 @@ const SignIn: React.FC = () => {
         <form>
           <div className="mb-4">
             <label className="mb-2.5 block font-medium text-black dark:text-white">
-              Email
+              username
             </label>
             <div className="relative">
               <input
-                type="email"
+                type="username"
+                onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter your email"
                 className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
@@ -52,6 +85,7 @@ const SignIn: React.FC = () => {
             <div className="relative">
               <input
                 type="password"
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="6+ Characters, 1 Capital letter"
                 className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
@@ -59,6 +93,7 @@ const SignIn: React.FC = () => {
           </div>
           <button
             type="submit"
+            onClick={handleLogin}
             className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-lg transition duration-300"
           >
             Sign In

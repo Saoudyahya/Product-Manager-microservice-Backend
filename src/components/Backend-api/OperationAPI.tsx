@@ -1,34 +1,34 @@
-const baseUrl = 'http://localhost:9091/api/products';
+const baseUrl = 'http://localhost:9090/api/operations';
 
-export const createProduct = async (product) => {
+export const createOperation = async (operation) => {
   try {
     const response = await fetch(baseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(operation),
     });
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error creating product:', error);
+    console.error('Error creating operation:', error);
     throw error;
   }
 };
 
-export const getAllProducts = async () => {
+export const getAllOperations = async () => {
   try {
     const response = await fetch(baseUrl);
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error getting products:', error);
+    console.error('Error getting operations:', error);
     throw error;
   }
 };
 
-export const getProductById = async (id) => {
+export const getOperationById = async (id) => {
   try {
     const response = await fetch(`${baseUrl}/${id}`);
     if (response.status === 404) {
@@ -37,35 +37,35 @@ export const getProductById = async (id) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(`Error getting product with ID ${id}:`, error);
+    console.error(`Error getting operation with ID ${id}:`, error);
     throw error;
   }
 };
 
-export const updateProduct = async (id, product) => {
+export const updateOperation = async (id, operation) => {
   try {
     const response = await fetch(`${baseUrl}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(operation),
     });
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(`Error updating product with ID ${id}:`, error);
+    console.error(`Error updating operation with ID ${id}:`, error);
     throw error;
   }
 };
 
-export const deleteProduct = async (id) => {
+export const deleteOperation = async (id) => {
   try {
     await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
     });
   } catch (error) {
-    console.error(`Error deleting product with ID ${id}:`, error);
+    console.error(`Error deleting operation with ID ${id}:`, error);
     throw error;
   }
 };

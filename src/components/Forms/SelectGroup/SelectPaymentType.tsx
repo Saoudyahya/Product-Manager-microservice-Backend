@@ -1,54 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { getAllProductTypes } from '../../Backend-api/ProductTypeApi';
+import React, { useState } from 'react';
 
-const SelectProductType: React.FC = () => {
-  const [productTypes, setProductTypes] = useState<string[]>([]);
+interface SelectPaymentTypeProps {
+  onPaymentTypeChange: (selectedType: string) => void;
+}
+
+const SelectPaymentType: React.FC<SelectPaymentTypeProps> = ({ onPaymentTypeChange }) => {
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-
-  const fetchProductTypes = async () => {
-    try {
-      const types = await getAllProductTypes();
-      setProductTypes(types);
-      console.log(types)
-    } catch (error) {
-      console.error('Error fetching product types:', error);
-    }
-  };
-
-  useEffect(() => {
-    console.log('fetchProductTypes called');
-
-    fetchProductTypes();
-  }, []);
 
   const changeTextColor = () => {
     setIsOptionSelected(true);
   };
 
+  const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedType = e.target.value;
+    setSelectedOption(selectedType);
+    changeTextColor();
+    // Call the function passed from the parent component to update the selected payment type
+    onPaymentTypeChange(selectedType);
+  };
+
   return (
     <div className="mb-4.5">
-      <label className="mb-2.5 block text-black dark:text-white">ProductType</label>
+      <label className="mb-2.5 block text-black dark:text-white">
+        Payment Type
+      </label>
 
       <div className="relative z-20 bg-transparent dark:bg-form-input">
         <select
           value={selectedOption}
-          onChange={(e) => {
-            setSelectedOption(e.target.value);
-            changeTextColor();
-          }}
+          onChange={handleOptionChange}
           className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${
             isOptionSelected ? 'text-black dark:text-white' : ''
           }`}
         >
-          <option value="" disabled className="text-body dark:text-bodydark">
-            Select your subject
+          <option value="" disabled className="block mb-2 text-lg font-semibold text-black dark:text-white">
+                 Payment Type
+
           </option>
-          {productTypes.map((type) => (
-            <option key={type} value={type} className="text-body dark:text-bodydark">
-              {type.name}
-            </option>
-          ))}
+          <option value="cart" className="text-body dark:text-bodydark">
+            Cart
+          </option>
+          <option value="check" className="text-body dark:text-bodydark">
+            Check
+          </option>
+          <option value="cash" className="text-body dark:text-bodydark">
+            Cash
+          </option>
         </select>
 
         <span className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
@@ -75,4 +73,4 @@ const SelectProductType: React.FC = () => {
   );
 };
 
-export default SelectProductType;
+export default SelectPaymentType;

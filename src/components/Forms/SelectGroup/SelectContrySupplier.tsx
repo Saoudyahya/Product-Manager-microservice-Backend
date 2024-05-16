@@ -1,29 +1,24 @@
 import React, { useState } from 'react';
-import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
-const SelectGroupTwo: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState<string>('');
-  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-
-  const changeTextColor = () => {
-    setIsOptionSelected(true);
-  };
-
+const SelectGroupTwo: React.FC = ({ onCountryChange, onRegionChange }) => {
   const [country, setCountry] = useState<string>('');
   const [region, setRegion] = useState<string>('');
 
   const selectCountry = (val: string) => {
     setCountry(val);
+    onCountryChange(val); // Pass selected country to parent component
   };
 
   const selectRegion = (val: string) => {
     setRegion(val);
+    onRegionChange(val); // Pass selected region to parent component
   };
 
   return (
     <div>
       <label className="mb-3 block text-black dark:text-white">
-        Select Country
+        Select Country - region 
       </label>
 
       <div className="relative z-20 bg-white dark:bg-form-input">
