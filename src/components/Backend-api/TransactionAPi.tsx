@@ -1,5 +1,6 @@
-const baseUrl = 'http://localhost:9091/api/transactions';
-const clientUrl = 'http://localhost:8000/api/clients'; 
+const baseUrl = 'http://localhost:8081/Product-microservice/api/transactions';
+
+const clientUrl = 'http://localhost:8081/client-microservice/api/clients'; 
 export const createTransactionProduct = async (transactionProduct) => {
   try {
     const response = await fetch(baseUrl, {

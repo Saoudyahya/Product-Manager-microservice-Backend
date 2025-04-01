@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getAllOperations } from '../Backend-api/OperationAPI';
+import { getAllOperations ,deleteOperation} from '../Backend-api/OperationAPI';
 import UpdateOperationOrderForm from '../../pages/Form/update-forms/UpdateOperationForm';
 
 const Operation = () => {
@@ -24,6 +24,8 @@ const Operation = () => {
 
   const handleOperationClick = (operation) => {
     setSelectedOperation(operation);
+   
+    
     operationRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -43,13 +45,24 @@ const Operation = () => {
       const updatedOperation = await getAllOperations(); 
       setOperations(updatedOperation); 
       if (selectedOperation) {
-        const updatedSelectedOperation = updatedOperation.find(operation => operation.id === selectedOperation.id);
+        const updatedSelectedOperation = updatedOperation.find(operation => operation.operationId === selectedOperation.operationId);
         setSelectedOperation(updatedSelectedOperation); 
       }
     } catch (error) {
       console.error('Error refetching data:', error);
     }
   };
+  const handleDeleteOperation = async () => {
+    try {
+      console.log(selectedOperation.operationId);
+      await deleteOperation(selectedOperation.operationId);
+      setOperations(operations.filter(operation => operation.operationId !== selectedOperation.operationId));
+      setSelectedOperation(null);
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
+  };
+
 
   return (
     <div className="mt-4 relative">
@@ -113,7 +126,7 @@ const Operation = () => {
           <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 mt-4 mr-5" onClick={handleUpdateOperation}>
             Update
           </button>
-          <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mt-4 mr-5" onClick={handleClosePopUp}>
+          <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mt-4 mr-5" onClick={handleDeleteOperation}>
             Delete
           </button>
           {showUpdateForm && <UpdateOperationOrderForm Operation={selectedOperation}  onRefetch={handleDataRefetch}  onClose={() => setShowUpdateForm(false)} />}

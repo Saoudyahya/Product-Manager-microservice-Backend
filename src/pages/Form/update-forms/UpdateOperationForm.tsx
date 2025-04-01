@@ -3,7 +3,7 @@
 import { useState  ,useEffect } from 'react';
 import SelectOperationOrder from '../../../components/Forms/SelectGroup/SelectOperatinOrder';
 import SelectOprationState from '../../../components/Forms/SelectGroup/SelectOprationState';
-import { createOperation } from '../../../components/Backend-api/OperationAPI';
+import { updateOperation } from '../../../components/Backend-api/OperationAPI';
 const UpdateOperationOrderForm: React.FC<{
     Operation: any;
     onClose: () => void;
@@ -29,12 +29,15 @@ const UpdateOperationOrderForm: React.FC<{
     payment_type: '', 
   };
  const initialOperation ={
+  operationId:'',
   orderOperations: [initialOrderOperation],
   operationReference: '',
   operationState: ''
 
  }
-  const [formData, setFormData] = useState(initialOperation);
+  const [formData, setFormData] = useState(Operation);
+  console.log(formData);
+  
   const handleOrderchangeChange = (selectedOrder) => {
   
     setFormData(prevFormData => {
@@ -57,7 +60,7 @@ const UpdateOperationOrderForm: React.FC<{
     e.preventDefault();
      console.log(formData)
   
-    const response = await createOperation(formData)
+    const response = await updateOperation(formData.operationId,formData)
     onClose()
     onRefetch()
     console.log(response);

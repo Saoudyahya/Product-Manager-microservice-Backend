@@ -8,6 +8,8 @@ const Products = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const productRef = useRef(null);
   const [showUpdateForm, setShowUpdateForm] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const Products = () => {
         console.error('Error fetching products:', error);
       }
     };
-
+    console.log(  localStorage.getItem('jwtToken'));
     fetchData();
   }, []);
 
@@ -44,6 +46,7 @@ const Products = () => {
     } catch (error) {
       console.error('Error deleting product:', error);
     }
+    setIsModalOpen(false);
   };
   const handleUpdateProduct = () => {
     setShowUpdateForm(true);

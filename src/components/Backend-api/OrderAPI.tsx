@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:9090/api/orders';
+const baseUrl = 'http://localhost:8081/import-export-service/api/orders';
 
 export const createOrder = async (order) => {
   try {

@@ -33,7 +33,7 @@ const SignIn: React.FC = () => {
 
       console.error('Login failed:', error.message);
     }
-      navigate('/calendar');
+    navigate('/Product');
   
   };
   return (

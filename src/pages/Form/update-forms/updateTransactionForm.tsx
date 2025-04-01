@@ -42,8 +42,8 @@ const UpdateTransactionForm: React.FC<{
   };
 
   const handleClientChange = (selectedClient) => {
-    const clientId = selectedClient.id;
-    setFormData({ ...formData, client: clientId });
+    
+    setFormData({ ...formData, client: selectedClient });
   };
 
   const handleQuantityChange = (productId: any, quantity: any) => {

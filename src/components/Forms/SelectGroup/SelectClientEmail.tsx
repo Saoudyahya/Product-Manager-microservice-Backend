@@ -7,8 +7,7 @@ interface Client {
   email: string;
   country: string;
   state: string;
-  updated_at: string;
-  created_at: string;
+  rewards: any[]; // Assuming rewards is an array of any type
 }
 
 const SelectClientEmail: React.FC<{
@@ -21,8 +20,8 @@ const SelectClientEmail: React.FC<{
   const fetchClients = async () => {
     try {
       const response = await getTransactionClient();
-      if (response && response.clients && Array.isArray(response.clients)) {
-        setClients(response.clients);
+      if (response && Array.isArray(response)) {
+        setClients(response);
       } else {
         console.error('Invalid data returned from API');
       }
@@ -34,18 +33,20 @@ const SelectClientEmail: React.FC<{
   useEffect(() => {
     fetchClients();
   }, []);
+
   useEffect(() => {
     if (formSubmitted) {
-  
       setSelectedClient(null);
-    } 
+    }
   }, [formSubmitted]);
 
   const handleClientChange = (clientId: number) => {
     const client = clients.find((client) => client.id === clientId);
     if (client) {
       setSelectedClient(client);
-      onClientChange(client);
+      console.log(client.id);
+      
+      onClientChange(client.id);
     }
   };
 
@@ -55,7 +56,7 @@ const SelectClientEmail: React.FC<{
 
       <div className="relative z-20 bg-transparent dark:bg-form-input">
         <select
-          value=""
+          value={selectedClient ? selectedClient.id.toString() : ''}
           onChange={(e) => {
             const clientId = parseInt(e.target.value);
             handleClientChange(clientId);
@@ -91,7 +92,6 @@ const SelectClientEmail: React.FC<{
         </span>
       </div>
 
-      {/* Display selected client details */}
       {selectedClient && (
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
@@ -115,15 +115,7 @@ const SelectClientEmail: React.FC<{
               <span className="font-semibold">State:</span> {selectedClient.state}
             </p>
           </div>
-          <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 col-span-full">
-            <h2 className="text-lg font-semibold mb-2">Timestamps</h2>
-            <p className="text-gray-700 dark:text-gray-300">
-              <span className="font-semibold">Created At:</span> {selectedClient.created_at}
-            </p>
-            <p className="text-gray-700 dark:text-gray-300">
-              <span className="font-semibold">Updated At:</span> {selectedClient.updated_at}
-            </p>
-          </div>
+    
         </div>
       )}
     </div>

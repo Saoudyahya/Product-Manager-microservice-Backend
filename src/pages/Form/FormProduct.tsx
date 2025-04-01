@@ -10,6 +10,8 @@ const ProductForm = () => {
   const [selectedOption, setSelectedOption] = useState<{ id: number; name: string } | null>({ id: 1, name: '' });
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
   const [showProductTypeForm, setShowProductTypeForm] = useState<boolean>(false); 
+  const [alertMessage, setAlertMessage] = useState<string>('');
+
 
 
   const [formData, setFormData] = useState({
@@ -48,6 +50,10 @@ const ProductForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (!formData.reference) {
+      setAlertMessage('Reference field cannot be empty');
+      return;
+    }
     try {
       const response = await createProduct(formData);
       console.log('Product created successfully:', response);
@@ -63,6 +69,7 @@ const ProductForm = () => {
         price_Unit: '',
         description: ''
       });
+      setAlertMessage('');
     } catch (error) {
       console.error('Error creating product:', error);
     }
@@ -91,6 +98,7 @@ const ProductForm = () => {
                     <label className="mb-2.5 block text-black dark:text-white">
                        name
                     </label>
+                  
                     <input
                       type="text"
                       value={formData.name}
@@ -105,6 +113,18 @@ const ProductForm = () => {
                     <label className="mb-2.5 block text-black dark:text-white">
                     Reference
                     </label>
+                    {alertMessage && (
+                <div className="mb-4 p-2 text-red-700 bg-red-100 border border-red-400 rounded flex items-center">
+                  <svg
+                    className="w-5 h-5 mr-2 fill-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M8.257 3.099c.366-.773 1.42-.773 1.786 0l5.816 12.286c.334.705-.167 1.515-.893 1.515H3.333c-.726 0-1.227-.81-.893-1.515L8.257 3.1zM9 13h2v2H9v-2zm0-6h2v5H9V7z" />
+                  </svg>
+                  {alertMessage}
+                </div>
+              )}
                     <input
                       type="text"
                       value={formData.reference}

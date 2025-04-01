@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:9090/api/suppliers';
+const BASE_URL = 'http://localhost:8081/import-export-service/api/suppliers';
 
 export async function getAllSuppliers() {
   try {

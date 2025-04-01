@@ -26,8 +26,7 @@ const TransactionForm = () => {
   };
 
   const handleClientChange = (selectedClient) => {
-    const clientId = selectedClient.id;
-    setFormData({ ...formData, client: clientId });
+    setFormData({ ...formData, client: selectedClient });
   };
 
   const handleQuantityChange = (productId, quantity) => {
@@ -38,7 +37,7 @@ const TransactionForm = () => {
   };
 
   const handleDateChange = (selectedDate) => {
-    setFormData({ ...formData, transactionDate: selectedDate });
+    setFormData(prevFormData => ({ ...prevFormData, transactionDate: selectedDate }));
   };
 
   const handlePaymentTypeChange = (selectedType) => {

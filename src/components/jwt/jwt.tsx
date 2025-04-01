@@ -28,12 +28,12 @@ export const isAuthenticated = () => {
 
   export const isAdmin = () => {
     const role = getUserRole();
-    return role === 'admin';
+    return role === 'Admin';
   };
 
  export const isUser = () => {
     const role = getUserRole();
-    return role === 'user';
+    return role === 'User';
   };
 
   export const signOut = () => {

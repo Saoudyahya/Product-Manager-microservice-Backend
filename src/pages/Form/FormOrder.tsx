@@ -46,7 +46,8 @@ const OrderForm = () => {
   };
 
   const handleDateChange = (selectedDate) => {
-    setFormData({ ...formData, OrderDate: selectedDate });
+    setFormData(prevFormData => ({ ...prevFormData, OrderDate: selectedDate }));
+    
   };
 
   const handleOrderTypeChange = (selectedType) => {
@@ -98,7 +99,7 @@ const OrderForm = () => {
       setFormData({
         reference: '',
         products: [],
-        OrderType: '',
+        OrderType: 'LOCAL',
         OrderDate: '',
         totalPrice: 0,
         supplier: {
@@ -107,7 +108,8 @@ const OrderForm = () => {
           country: '',
           region: '',
           productIds: [],
-        }
+        },
+    
       });
     } catch (error) {
       console.error('Error creating product:', error);

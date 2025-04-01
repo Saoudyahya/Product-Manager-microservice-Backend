@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation , Navigate } from 'react-router-dom';
+import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
 
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
@@ -25,8 +25,7 @@ import TransactionsTables from './pages/TransactionTable';
 import SupplierTable from './pages/SupplierTable';
 import OrderTables from './pages/OrderTable';
 import OperationTable from './pages/OperationTable';
-import { isAdmin , isUser , isAuthenticated } from './components/jwt/jwt';
-
+import { isAdmin, isUser } from './components/jwt/jwt';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -39,202 +38,272 @@ function App() {
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
-  
+
+  const isAuthorized = () => isAdmin() || isUser();
 
   return loading ? (
     <Loader />
   ) : (
     <>
       <Routes>
-                <Route
-            index
-            element={
-              isAdmin() ? (
-                <>
-                  <PageTitle title="eCommerce Dashboard " />
-                  <ECommerce />
-                </>
-              ) : (
-                <Navigate to="/auth/login" replace />
-              )
-            }
-          />
-            <Route
+        <Route
+          index
+          element={
+            isAuthorized() ? (
+              <>
+                <PageTitle title="eCommerce Dashboard " />
+                <ECommerce />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
+          }
+        />
+        <Route
           path="/calendar"
           element={
-            isAdmin() ? (
+            isAuthorized() ? (
               <>
                 <PageTitle title="Calendar " />
                 <Calendar />
               </>
             ) : (
-              <Navigate to="/auth/Signin" replace />
+              <Navigate to="/auth/signin" replace />
             )
           }
         />
-
         <Route
           path="/profile"
           element={
-            <>
-              <PageTitle title="Profile " />
-              <Profile />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Profile " />
+                <Profile />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-        
-            <Route
+        <Route
           path="/forms/Product"
           element={
-            <>
-              <PageTitle title="Product" />
-           <ProductForm/>
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Product" />
+                <ProductForm />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-         <Route
+        <Route
           path="/forms/Transactions"
           element={
-            <>
-              <PageTitle title="Transactions" />
-           <TransactionForm/>
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Transactions" />
+                <TransactionForm />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
         <Route
           path="/forms/form-elements"
           element={
-            <>
-              <PageTitle title="Form Elements " />
-              <FormElements />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Form Elements " />
+                <FormElements />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
         <Route
           path="/forms/form-layout"
           element={
-            <>
-              <PageTitle title="Form Layout " />
-              <FormLayout />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Form Layout " />
+                <FormLayout />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-         <Route
+        <Route
           path="/forms/Supplier"
           element={
-            <>
-              <PageTitle title="Form Layout " />
-              <SupplierForm />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Supplier" />
+                <SupplierForm />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-           <Route
+        <Route
           path="/forms/Operations"
           element={
-            <>
-              <PageTitle title="Form Layout " />
-              <OperationOrderForm />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Operations" />
+                <OperationOrderForm />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-         <Route
+        <Route
           path="/forms/Orders"
           element={
-            <>
-              <PageTitle title="Form Layout " />
-              <OrderForm />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Orders" />
+                <OrderForm />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
         <Route
           path="/tables"
           element={
-            <>
-              <PageTitle title="Tables " />
-              <Tables />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Tables " />
+                <Tables />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-            <Route
+        <Route
           path="/Product"
           element={
-            <>
-              <PageTitle title="Tables " />
-              <ProductTables />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Product Tables " />
+                <ProductTables />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-         <Route
+        <Route
           path="/Transaction"
           element={
-            <>
-              <PageTitle title="Tables " />
-              <TransactionsTables />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Transaction Tables " />
+                <TransactionsTables />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-           <Route
+        <Route
           path="/Supplier"
           element={
-            <>
-              <PageTitle title="Tables " />
-              <SupplierTable />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Supplier Tables " />
+                <SupplierTable />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-         <Route
+        <Route
           path="/Orders"
           element={
-            <>
-              <PageTitle title="Tables " />
-              <OrderTables />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Order Tables " />
+                <OrderTables />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-           <Route
+        <Route
           path="/Operations"
           element={
-            <>
-              <PageTitle title="Tables " />
-              <OperationTable />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Operation Tables " />
+                <OperationTable />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
-        
         <Route
           path="/settings"
           element={
-            <>
-              <PageTitle title="Settings " />
-              <Settings />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Settings " />
+                <Settings />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
         <Route
           path="/chart"
           element={
-            <>
-              <PageTitle title="Basic Chart " />
-              <Chart />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Basic Chart " />
+                <Chart />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
         <Route
           path="/ui/alerts"
           element={
-            <>
-              <PageTitle title="Alerts " />
-              <Alerts />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Alerts " />
+                <Alerts />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
         <Route
           path="/ui/buttons"
           element={
-            <>
-              <PageTitle title="Buttons " />
-              <Buttons />
-            </>
+            isAuthorized() ? (
+              <>
+                <PageTitle title="Buttons " />
+                <Buttons />
+              </>
+            ) : (
+              <Navigate to="/auth/signin" replace />
+            )
           }
         />
         <Route

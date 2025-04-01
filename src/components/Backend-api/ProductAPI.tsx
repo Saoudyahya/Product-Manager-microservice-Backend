@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:9091/api/products';
+const baseUrl = 'http://localhost:8081/Product-microservice/api/products';
 
 export const createProduct = async (product) => {
   try {

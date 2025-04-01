@@ -27,6 +27,7 @@ const Order = () => {
 
   const handleOrderClick = (order) => {
     setSelectedOrder(order);
+    
     orderRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -41,7 +42,6 @@ const Order = () => {
   const handleDeleteOrder = async () => {
     try {
       await deleteOrder(selectedOrder.orderId);
-      // Filter out the deleted order from the orders list
       setOrders(orders.filter(order => order.orderId !== selectedOrder.orderId));
       setSelectedOrder(null);
     } catch (error) {
