@@ -30,6 +30,7 @@ ___
 This template was used to build the front-end for a Product manager microservice, integrating React with a microservices architecture powered by Spring Boot, Node.js, RabbitMQ, and WebSockets. Below is an architectural overview of the system:
 
 ![Copie de STAGE PRESENTATION](https://github.com/user-attachments/assets/853a2bf7-775e-439d-906c-1ad698a1bf19)
+![Copie de STAGE PRESENTATION](https://github.com/user-attachments/assets/e31a0544-46f8-4511-9c3e-887e0ba6faa5)
 
 
 ### [⬇️ Download Now](https://tailadmin.com/download)
@@ -42,7 +43,8 @@ This template was used to build the front-end for a Product manager microservice
 
 ### [👉 TailAdmin HTML Version](https://github.com/TailAdmin/tailadmin-free-tailwind-dashboard-template)
 
-TailAdmin React dashboard template based on Tailwind CSS is a pre-designed starting point for building a web-based dashboard using the React JavaScript library and the Tailwind CSS utility-first framework. This Tailwind CSS + React Dashboard Template - built using Tailwind CSS and **includes pre-built components, such as navigation menus, charts, tables, and forms, which can be easily customized and integrated into a small-to-large React web application**.
+TailAdmin React dashb
+oard template based on Tailwind CSS is a pre-designed starting point for building a web-based dashboard using the React JavaScript library and the Tailwind CSS utility-first framework. This Tailwind CSS + React Dashboard Template - built using Tailwind CSS and **includes pre-built components, such as navigation menus, charts, tables, and forms, which can be easily customized and integrated into a small-to-large React web application**.
 
 If you're looking for a high-quality **React-Tailwind Dashboard, Admin Panel Template, or UI Kit**, TailAdmin will be the perfect choice for you!
 
